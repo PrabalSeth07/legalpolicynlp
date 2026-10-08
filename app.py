@@ -74,7 +74,15 @@ def main() -> None:
     with st.spinner("Processing document..."):
         processed = preprocess_document(text, pages=pages)
         chunks = build_chunks(processed, config)
-        report = analyze_document(processed, user_type, document_type, specific_concern, config)
+        try:
+            report = analyze_document(processed, user_type, document_type, specific_concern, config)
+        except RuntimeError as exc:
+            st.error(str(exc))
+            st.info(
+                "For your demo, either add API credits at OpenAI billing or temporarily remove "
+                "LLM_API_KEY from your .env file to use LegalEase demo mode."
+            )
+            return
 
     stats = processed.stats
     col1, col2, col3, col4 = st.columns(4)

@@ -2,6 +2,7 @@ import os
 from typing import Any
 
 from dotenv import load_dotenv
+from openai import OpenAIError, RateLimitError
 
 
 class LLMClient:
@@ -23,18 +24,26 @@ class LLMClient:
 
         llm_config = self.config.get("llm", {})
         client = OpenAI(api_key=self.api_key, base_url=self.base_url)
-        response = client.chat.completions.create(
-            model=llm_config.get("model", "gpt-4o-mini"),
-            temperature=llm_config.get("temperature", 0.2),
-            max_tokens=llm_config.get("max_tokens", 3000),
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are LegalEase. Explain documents clearly without giving legal advice.",
-                },
-                {"role": "user", "content": prompt},
-            ],
-        )
+        try:
+            response = client.chat.completions.create(
+                model=llm_config.get("model", "gpt-4o-mini"),
+                temperature=llm_config.get("temperature", 0.2),
+                max_tokens=llm_config.get("max_tokens", 3000),
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are LegalEase. Explain documents clearly without giving legal advice.",
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+            )
+        except RateLimitError as exc:
+            raise RuntimeError(
+                "OpenAI API quota is exhausted. Add credits in OpenAI billing or remove the API key to use demo mode."
+            ) from exc
+        except OpenAIError as exc:
+            raise RuntimeError(f"OpenAI API request failed: {exc}") from exc
+
         return response.choices[0].message.content or ""
 
 

@@ -1,6 +1,6 @@
 llm:
-  provider: "openai"
-  model: "gpt-4o-mini"
+  provider: "groq"
+  model: "openai/gpt-oss-20b"
   temperature: 0.2
   max_tokens: 3000
   timeout_seconds: 60

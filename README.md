@@ -81,10 +81,11 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-5. Add your API key to `.env`.
+5. Add your Groq API key to `.env`.
 
 ```text
-LLM_API_KEY=your_api_key_here
+LLM_API_KEY=your_groq_api_key_here
+LLM_BASE_URL=https://api.groq.com/openai/v1
 ```
 
 ## Run
