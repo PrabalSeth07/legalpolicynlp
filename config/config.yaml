@@ -1,0 +1,15 @@
+llm:
+  provider: "openai"
+  model: "gpt-4o-mini"
+  temperature: 0.2
+  max_tokens: 3000
+  timeout_seconds: 60
+
+chunking:
+  chunk_size: 6000
+  chunk_overlap: 500
+
+analysis:
+  max_chunks: 8
+  max_retries: 2
+  demo_mode_if_no_key: true
