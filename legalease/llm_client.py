@@ -2,7 +2,7 @@ import os
 from typing import Any
 
 from dotenv import load_dotenv
-from openai import OpenAIError, RateLimitError
+from openai import BadRequestError, OpenAIError, RateLimitError
 
 
 class LLMClient:
@@ -40,6 +40,11 @@ class LLMClient:
         except RateLimitError as exc:
             raise RuntimeError(
                 "OpenAI API quota is exhausted. Add credits in OpenAI billing or remove the API key to use demo mode."
+            ) from exc
+        except BadRequestError as exc:
+            raise RuntimeError(
+                "The configured LLM model was rejected by the provider. "
+                "Check config/config.yaml and use a model available for your API account."
             ) from exc
         except OpenAIError as exc:
             raise RuntimeError(f"OpenAI API request failed: {exc}") from exc

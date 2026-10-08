@@ -88,6 +88,12 @@ LLM_API_KEY=your_groq_api_key_here
 LLM_BASE_URL=https://api.groq.com/openai/v1
 ```
 
+The default Groq model is configured in `config/config.yaml`:
+
+```yaml
+model: "openai/gpt-oss-120b"
+```
+
 ## Run
 
 ```bash
